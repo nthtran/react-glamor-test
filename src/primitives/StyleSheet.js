@@ -27,6 +27,8 @@ function createStyle(o: Object) {
   };
 }
 
+// TODO: cache create style
+
 function stylesToRule(styleList: Array<number | Object>) {
   return styleList.reduce((acc, s) => ({
       ...acc,
@@ -45,5 +47,6 @@ export default class StyleSheet {
     });
   }
 
-  static resolve = (styleObj: ?StyleObj) => stylesToRule(flattenStyle(styleObj));
+  static resolve = ({ style: styleObj }: { style: StyleObj }) =>
+    stylesToRule(flattenStyle(styleObj));
 }

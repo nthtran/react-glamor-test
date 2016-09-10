@@ -4,8 +4,10 @@ import React from 'react';
 import StyleSheet from './StyleSheet';
 import createDOMElement from './createDOMElement';
 import type { Props as DOMProps } from './createDOMElement';
+import type { StyleObj } from './StyleSheetTypes';
 
 const styles = StyleSheet.create({
+  // https://github.com/facebook/css-layout#default-values
   // https://github.com/facebook/css-layout#default-values
   initial: {
     alignItems: 'stretch',
@@ -27,13 +29,14 @@ const styles = StyleSheet.create({
     // list reset
     listStyle: 'none',
     // fix flexbox bugs
-    maxWidth: '100%',
     minHeight: 0,
     minWidth: 0,
-    // momentum scrolling
-    WebkitOverflowScrolling: 'touch',
-    // flex reset
+  },
+  flexReset: {
     flexShrink: 0,
+  },
+  momentumScrolling: {
+    WebkitOverflowScrolling: 'touch',
   },
 });
 
@@ -62,7 +65,7 @@ const pointerEventStyles = StyleSheet.create({
 
 type Props = DOMProps & {
   pointerEvents?: 'auto' | 'box-none' | 'box-only' | 'none',
-  style?: Object,
+  style?: StyleObj,
 };
 
 /* eslint react/prefer-stateless-function: 0 */
@@ -71,22 +74,20 @@ export default class View extends React.Component {
 
   render() {
     const {
-      style,
       pointerEvents,
+      style,
       ...otherProps,
     } = this.props;
 
-    const component = 'div';
-
-    const props = {
+    return createDOMElement('div', {
       ...otherProps,
-      ...StyleSheet.resolve([
+      style: [
         styles.initial,
+        styles.flexReset,
+        styles.momentumScrolling,
         style,
         pointerEvents && pointerEventStyles[pointerEvents],
-      ]),
-    };
-
-    return createDOMElement(component, props);
+      ],
+    });
   }
 }

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import View from './primitives/View';
+import Text from './components/Text';
 import StyleSheet from './primitives/StyleSheet';
 import logo from './logo.svg';
 import './App.css';
-import Scale from './styles/Scale';
 
 const styles = StyleSheet.create({
   yellow: {
@@ -43,18 +43,17 @@ class App extends Component {
           styles.yellow,
           {
             padding: 24,
-            ':hover': { backgroundColor: 'blue',
-          },
+            ':hover': { backgroundColor: 'blue' },
         }]}
       >
-        holleo
+        <Text selectable={false}>hola</Text>
       </View>
       <View
         pointerEvents="box-only"
         style={styles.blue}
       >
         <View>
-          {count}
+          <Text>{count}</Text>
         </View>
       </View>
       </div>

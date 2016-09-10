@@ -5,6 +5,7 @@
 // https://github.com/necolas/react-native-web/blob/master/src/modules/createDOMElement/index.js
 
 import React from 'react';
+import StyleSheet from './StyleSheet';
 
 const roleComponents = {
   article: 'article',
@@ -50,6 +51,7 @@ const createDOMElement = (component, props: Props = {}) => {
 
   return <Component
     {...otherProps}
+    {...StyleSheet.resolve(otherProps)}
     aria-hidden={accessible ? null : true}
     aria-label={accessibilityLabel}
     aria-live={accessibilityLiveRegion}
