@@ -18,35 +18,34 @@ function createStyle(o: Object) {
     }
   });
 
-  return {
-    ...style(_style),
-    ..._rules.reduce((acc, rule) => ({
-      ...acc,
-      ...rule,
-    }), {}),
-  };
+  return Object.assign(
+    {},
+    style(_style),
+    ..._rules,
+  );
 }
 
-// TODO: cache create style
-
+// TODO: cache createStyle
 function stylesToRule(styleList: Array<number | Object>) {
-  return styleList.reduce((acc, s) => ({
-      ...acc,
-      ...createStyle(
-        typeof s === 'number'
-          ? StyleRegistry.getByID(s)
-          : s
-      ),
-  }), {});
+  return Object.assign(
+    {},
+    ...styleList.map(s => createStyle(
+      typeof s === 'number'
+        ? StyleRegistry.getByID(s)
+        : s
+    )),
+  );
 }
 
-export default class StyleSheet {
-  static create(styles: { [key: string]: Object }): { [key: string]: number } {
-    return mapValues(styles, (val: Object) => {
-      return StyleRegistry.register(val);
-    });
-  }
+export type Styles = { [key: string]: Object };
+export type StyleSheet<S: Styles> = { [key: $Keys<S>]: number };
 
-  static resolve = ({ style: styleObj }: { style: StyleObj }) =>
-    stylesToRule(flattenStyle(styleObj));
-}
+export default {
+  create<S: Styles>(obj: S): StyleSheet<S> {
+    return mapValues(obj, (val: Object) =>
+      StyleRegistry.register(val));
+  },
+
+  resolve: (props: { style: StyleObj }) =>
+    stylesToRule(flattenStyle(props.style)),
+};
